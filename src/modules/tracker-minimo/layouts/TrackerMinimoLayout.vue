@@ -2,13 +2,16 @@
     <NavBar/>
 
     <div class="d-flex">
-        <div class="col-4" id="side-menu">
-            Menu lateral
+        <div class="col-4 border-right border-secondary" id="side-menu">
+            <SideMenu
+                @emitMont="checkMont($event)"
+            />
         </div>
 
-        <div class="col" id="content">
+        <div class="row col justify-content-center" id="content">
             <router-view/>
-            Area de contenido
+            {{selectedMont}}
+            <Task :days="this.days" />
         </div>
     </div>
 </template>
@@ -17,17 +20,25 @@
 import {defineAsyncComponent} from 'vue'
 export default {
     components:{
-        NavBar: defineAsyncComponent( () => import('../components/NavBar.vue'))
+        NavBar: defineAsyncComponent( () => import('../components/NavBar.vue')),
+        SideMenu: defineAsyncComponent( () => import('../components/SideMenu.vue')),
+        Task: defineAsyncComponent( () => import('../components/Task.vue'))
+    },
+    data() {
+        return{
+            selectedMont: {},
+            days: null
+            
+        }
+
+    },
+    methods:{
+        checkMont(mont){
+            console.log(mont);
+            this.selectedMont = mont;
+            this.days = mont.days;
+
+        }
     }
 }
 </script>
-
-<style>
-    #side-menu{
-        background-color: darkcyan;
-    }
-
-    #content{
-        background-color: cadetblue;
-    }
-</style>
