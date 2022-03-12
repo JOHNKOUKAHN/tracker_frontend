@@ -1,33 +1,18 @@
 <template>
-    <div class="task border border-secondary col-7" >
-        <h1>tarea</h1>
-        <div class="row"   v-for="day  in days" :key="day">
-            {{day}} 
-            <div class="day col-3"></div>
-            <div class="day col-3"></div>
-            <div class="day col-3"></div>
-        </div>
-    </div>
+<div class="task"
+     @click="$router.push({name: 'task', params: {id:10}})">
+    <h2>Tarea</h2>
+    Descripcion de la tarea
+</div>
 </template>
 
-<script>
-export default {
-    props:{
-        days:{
-            type: Number
-        }
+<style lang='scss' scoped>
+.task {
+    border-bottom: 1px solid #2c3e50;
+    transition: 0.2s all ease-in;
+    &:hover{
+        background-color: lighten($color:gray, $amount: 45);
     }
 }
-</script>
 
-<style scoped>
-.task{
-    margin-top: 10%;
-    height: 80vh;
-}
-.day{
-    height: 15px;
-    background-color: dodgerblue;
-
-}
 </style>

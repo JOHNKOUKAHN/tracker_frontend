@@ -23,12 +23,22 @@
             </div>
         </div>
         <div class=" task-container">
-            <div class="col-4">
-                <label for="demo_overview">Escoja una tarea</label>
-                <select id="task-selected" class="form-control" data-role="select-dropdown">
-                    <option value="" selected disabled>Tarea</option>
-                </select>
+            <div class="px-2 pt-2">
+                <input 
+                    type="text"
+                    class="form-control"
+                    placeholder="Buscar Tareas"
+                    >
+
             </div>
+        </div>
+
+        <div class="task-scrollarea">
+            <Task class="task"
+                v-for="task in 100"
+                :key="task"/>
+        
+
         </div>
 
 
@@ -36,7 +46,12 @@
     </div>
 </template>
 <script>
+
+import {defineAsyncComponent} from 'vue'
 export default {
+    components:{
+        Task: defineAsyncComponent(() => import('./Task.vue'))
+    },
     data(){
         return{
             
@@ -69,10 +84,16 @@ export default {
 
 <style lang="scss" scoped>
 
-.menu-container{
+.menu-container {
     border-right: 1px solid dimgray;
     height: calc(100vh - 56px);
     
 }
+
+.task-scrollarea {
+    height: calc(100vh - 110px);
+    overflow: scroll;
+}
+
 
 </style>

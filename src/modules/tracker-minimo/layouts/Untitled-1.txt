@@ -1,0 +1,21 @@
+user: {
+
+
+}
+
+task:{
+    id: Number,
+    title: String,
+    labelMin: String,
+    labelOk: String,
+    labelIdeal: String
+}
+
+
+register:{
+    id: Number,
+    taskId: Number,
+    month: Number,
+    year: Nummber.
+    dayLevel: Number[31]
+}

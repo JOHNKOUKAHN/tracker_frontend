@@ -10,8 +10,6 @@
 
         <div class="row col justify-content-center" id="content">
             <router-view/>
-            {{selectedMont}}
-            <Task :days="this.days" />
         </div>
     </div>
 </template>
@@ -22,7 +20,6 @@ export default {
     components:{
         NavBar: defineAsyncComponent( () => import('../components/NavBar.vue')),
         SideMenu: defineAsyncComponent( () => import('../components/SideMenu.vue')),
-        Task: defineAsyncComponent( () => import('../components/Task.vue'))
     },
     data() {
         return{
