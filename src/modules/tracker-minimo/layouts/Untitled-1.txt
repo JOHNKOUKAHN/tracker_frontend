@@ -6,9 +6,12 @@ user: {
 task:{
     id: Number,
     title: String,
-    labelMin: String,
-    labelOk: String,
-    labelIdeal: String
+    labels:{}
+        labelMin: String,
+        labelOk: String,
+        labelIdeal: String
+        }
+     days:[31]   
 }
 
 

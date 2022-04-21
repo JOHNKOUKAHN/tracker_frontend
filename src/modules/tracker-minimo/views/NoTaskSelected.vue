@@ -1,6 +1,8 @@
 <template>
 <div class="d-flex justify-content-center">
-    <h1 class="align-self-center">No se Ha seleccionado ningun mes</h1>
+    <h1 class="align-self-center">No hay registros para esta actividad en esta fecha </h1>
+    <h3 class="align-self-center">Presiona el botón para empezar un nuevo registro </h3>
+
 </div>
   <SaveButton/>
 </template>

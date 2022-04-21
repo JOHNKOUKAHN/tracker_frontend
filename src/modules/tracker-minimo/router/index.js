@@ -6,13 +6,19 @@ export default {
             path: '',
             name: 'no-task',
             component: () => import(/* webpackChunkName: "no-task" */ '@/modules/tracker-minimo/views/NoTaskSelected.vue'),
-            
         },
         {
-            path: ':id',
+            path: ':id/:month/:year',
             name: 'task',
             component: () => import(/* webpackChunkName: "task" */ '@/modules/tracker-minimo/views/TaskView.vue'),
-           
+            props: ( route ) =>{
+                return{
+                    id: route.params.id,
+                    month: route.params.month,
+                    year: route.params.year,
+                 
+                }
+            },
         }
     ]
   

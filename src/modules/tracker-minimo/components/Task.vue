@@ -1,11 +1,28 @@
 <template>
 <div class="task"
-     @click="$router.push({name: 'task', params: {id:10}})">
-    <h2>Tarea</h2>
-    Descripcion de la tarea
+     @click="pushRoute()">
+    <h2>{{task.title}}</h2>
+    {{task.importance}}
 </div>
 </template>
 
+<script>
+
+export default {
+    props:{
+        task:{
+            type: Object,
+            required: true
+        }
+    },
+    methods:{
+        pushRoute(){
+            this.$router.push({name: 'task', params: {id: this.task.activity_id, month: 3, year: 2022}})
+        }
+    }
+    
+}
+</script>
 <style lang='scss' scoped>
 .task {
     border-bottom: 1px solid #2c3e50;

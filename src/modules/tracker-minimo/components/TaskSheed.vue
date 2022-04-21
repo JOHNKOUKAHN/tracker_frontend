@@ -1,72 +1,143 @@
 <template>
-    <div class="task border border-secondary col-7" >
-        <h1 class="">tarea</h1>
+    <div  v-if="reg && activity" class="task  col-12" >
+        <h1 class="">{{activity.title}}</h1>
         <div class="task-header row">
             <div>
-            <span>Marzo</span>
+            <div>    
+            <span id="month-display">{{monthName}}</span>
+            <span id="year-display">{{year}}</span>
             </div>
-            <div class="level-container col-4">
-                <span class="level-label">Minimo</span>
             </div>
-            <div class="level-container col-4">
-                <span class="level-label">Bien</span>
+            <div class="level-container">
+                <span class="level-label">Minimo: {{activity.labels.min}}</span>
             </div>
-            <div class="level-container col-4">
-                <span class="level-label">Ideal</span>
+            <div class="level-container">
+                <span class="level-label">{{activity.labels.ok}}</span>
+            </div>
+            <div class="level-container">
+                <span class="level-label">{{activity.labels.ideal}}</span>
             </div>
         </div>
-        <div class="row"   v-for="day  in days" :key="day">
-            <span class="day-number">{{day.dayNumber}}</span>
-            <div v-bind:class="{selected: (day.level == 1 || day.level == 2 || day.level == 3 )}" 
-                 class="day min col-3"
-                 @click="changeDayLevel(day.dayNumber,1)"></div>
-            <div class="day ok col-3"
-                 v-bind:class="{selected: (day.level == 2 || day.level == 3 )}"
-                 @click="changeDayLevel(day.dayNumber,2)"></div>
-            <div class="day ideal col-3"
-                 v-bind:class="{selected: ( day.level == 3 )}"
-                 @click="changeDayLevel(day.dayNumber,3)"></div>
+        <div class="row"   v-for="(day,i)  in reg.daysLabel" :key="day">
+            <span class="day-number"
+                   @click="changeDayLevel(i,0)">{{i+1}}</span>
+            <div v-bind:class="{selected: (day == 1 || day == 2 || day == 3 )}" 
+                 class="day min"
+                 @click="changeDayLevel(i,1)"></div>
+            <div class="day ok "
+                 v-bind:class="{selected: (day == 2 || day == 3 )}"
+                 @click="changeDayLevel(i,2)"></div>
+            <div class="day ideal "
+                 v-bind:class="{selected: ( day == 3 )}"
+                 @click="changeDayLevel(i,3)"></div>
         </div>
     </div>
 </template>
 
 <script>
+import getActivities from '../helpers/getActivities'
+import getActivityById from '../helpers/getActivityById'
+import getDate from '../helpers/getDate'
+import getRegister from '../helpers/getRegister'
+import getBlankRegister from '../helpers/getBlankRegister'
 export default {
     props:{
+         id:{
+        type: String,
+        required: true  
+      },
+      month:{
+        type: String,
+        required: true  
+      },
+      year:{
+        type: String,
+        required: true  
+      }
+        
     },
     data(){
         return{
-            days: [
-                { dayNumber:1, level: 0 },
-                { dayNumber:2, level: 1 },
-                { dayNumber:3, level: 2 },
-                { dayNumber:4, level: 3 },
-                { dayNumber:5, level: 0 },
-                { dayNumber:6, level: 1 },
-                { dayNumber:7, level: 2 },
-                { dayNumber:8, level: 3 },
-                { dayNumber:9, level: 0 },
-                { dayNumber:10, level: 0 },
-            ]
+            reg: null,
+            activity: null,
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+       
+
         }
     },
     methods:{
         changeDayLevel(dayNumber, level){
-            this.days[dayNumber -1].level = Number(level);
+            this.reg.dayLevels[dayNumber] = Number(level);
+        },
+        getTasks(){
+            let {activities} = getActivities();
+            this.tasks = activities
+        },
+        async getActivity(){
+            this.activity  = await getActivityById(this.id); 
+            console.log(this.activity)
+        },
+        getDateYear(){
+            let {monthName} = getDate(Date().toString())
+            this.monthName= monthName
+        },
+        async setRegister(){  
+         this.reg = await getRegister(this.id,this.month,this.year)
+         if(!this.reg){
+             this.reg = getBlankRegister(this.id,this.month,this.year)
+         }
+
+        },
+    },
+    computed:{
+      monthName(){
+        return this.months[Number(this.month) - 1]
+      }
+    },
+    created(){
+        this.getActivity()
+        this.getDateYear()
+        this.setRegister()
+    },
+    updated(){
+        
+    },
+    watch:{ 
+      id(){
+        console.log("id changed TS")
+        this.setRegister()
+      },
+      month(){
+        console.log("Month changed TS")
+        this.setRegister()
+      },
+      year(){
+        console.log("Year changed TS")
+        this.setRegister()
+      }
         }
-    }
+    
 
 }
 </script>
 
 <style lang="scss" scoped>
+h1{
+    width: 200px;
+    margin: 0 auto;
+    font-size: 3rem;
+}
 .task{
-    margin-top: 10%;
-    height: 80vh;
+    margin: 10% auto;
+    max-width: 800px;
+    font-family: 'Square Peg', cursive;
+    color: #5497A7
+
 }
 .day{
-    height:20px;
-    background-color: dodgerblue;
+    width: 25%;
+    height: 20px;
+    background-color: #78CAD2;
     padding-top: 5px;
     margin-top: 5px;
     margin-left: 2px;
@@ -74,21 +145,24 @@ export default {
 }
 
 .min{
-    border-top-left-radius: 50%;
-    border-bottom-left-radius: 50%;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
     border-left-style: dashed solid;
 
 }
 
 .ideal{
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
     border-left-style: dashed solid;
 }
 
-
+.level-container{
+    width: 30%;
+    text-align: end;
+}
 .level-label{
-    padding: 60px;
+    padding-left: 40px;
 }
 
 .day-number{
@@ -99,6 +173,16 @@ export default {
 }
 
 .selected{
-    background-color: rgb(4, 6, 8);
+    background-color: #50858B;
 }
+
+#month-display{
+    margin-left: 20%;
+    font-size: 2rem;
+}
+#year-display{
+    margin: 1em;
+    font-size: 1rem;
+}
+
 </style>

@@ -1,27 +1,5 @@
 <template>
     <div class="menu-container">
-        {{selectedMont.days}}
-        <div class="date-container">
-            <div class="col-4">
-                <label for="demo_overview">Escoja una fecha</label>
-                <select id="year-selected" class="form-control" data-role="select-dropdown">
-                    <option value="" selected disabled>Año</option>
-                </select>
-            </div>
-            <div class="col-5">    
-                <select id="mont-selected" 
-                        class="form-control" 
-                        data-role="select-dropdown" 
-                        @change="selectMont($event)"
-                        >
-                    <option value="" selected disabled>Mes</option>
-                    <option 
-                        v-for="mont in monts" 
-                        :key="mont.id"
-                        > {{mont.name}} </option>
-                </select>
-            </div>
-        </div>
         <div class=" task-container">
             <div class="px-2 pt-2">
                 <input 
@@ -35,8 +13,9 @@
 
         <div class="task-scrollarea">
             <Task class="task"
-                v-for="task in 100"
-                :key="task"/>
+                v-for="task in tasks"
+                :key="task.id"
+                :task="task"/>
         
 
         </div>
@@ -46,7 +25,9 @@
     </div>
 </template>
 <script>
-
+import getActivities from '../helpers/getActivities'
+import getDate from '../helpers/getDate'
+import getRegister from '../helpers/getRegister'
 import {defineAsyncComponent} from 'vue'
 export default {
     components:{
@@ -55,7 +36,8 @@ export default {
     data(){
         return{
             
-            selectedMont: {},    
+            selectedMont: {},
+            tasks:[],    
             monts:[
                         {id: 1,name: 'Enero', days:31},
                         {id: 2,name: 'Febrero', days:28},
@@ -73,11 +55,30 @@ export default {
         }
     },
     methods:{
+
+        async getTasks(){
+            let {activities} = await getActivities();
+            console.log(activities)
+            this.tasks = activities
+        },
+
+        getDateYear(){
+            
+            console.log(Date().toString(),"jgjgjhghj")
+            let {year,monthName,monthNumber} = getDate(Date().toString())
+            console.log(year, monthName, monthNumber,"ggui")
+        },
         selectMont(event){
             console.log(event.target.options[event.target.options.selectedIndex].text)
             this.selectedMont = this.monts[event.target.options.selectedIndex-1];
             this.$emit('emitMont',this.monts[event.target.options.selectedIndex-1]);
         }
+    },
+    created(){
+        this.getTasks()
+        this.getDateYear()
+        let {register} = getRegister(1,3,2022)
+        console.log(register)
     }
 }
 </script>
