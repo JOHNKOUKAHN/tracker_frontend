@@ -23,9 +23,6 @@
     :month="month"
     :year="year"
     />
-  <SaveButton
-  @click="incMonth"
-  icon='fa-save'/>
 </template>
 
 <script>
@@ -50,7 +47,6 @@ export default {
     },
     components:{
         TaskSheet:  defineAsyncComponent(() => import('./../components/TaskSheed.vue')),
-        SaveButton: defineAsyncComponent( () => import('../components/SaveButton.vue'))
     },
       data(){
         return{
@@ -89,6 +85,12 @@ export default {
     computed:{
       monthName(){
         return this.months[Number(this.month) - 1]
+      }
+    },
+    beforeCreate(){
+      
+      if(!localStorage.getItem('token')){
+        this.$router.push('/login')
       }
     },
     created(){

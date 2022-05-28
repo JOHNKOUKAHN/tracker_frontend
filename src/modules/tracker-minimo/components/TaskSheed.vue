@@ -32,15 +32,24 @@
                  @click="changeDayLevel(i,3)"></div>
         </div>
     </div>
+    
+  <SaveButton
+  @click="updateReg"
+  icon='fa-save'/>
 </template>
 
 <script>
+import {defineAsyncComponent} from 'vue'
 import getActivities from '../helpers/getActivities'
 import getActivityById from '../helpers/getActivityById'
 import getDate from '../helpers/getDate'
 import getRegister from '../helpers/getRegister'
+import updateRegister from '../helpers/updateRegister'
 import getBlankRegister from '../helpers/getBlankRegister'
 export default {
+    components:{
+        SaveButton: defineAsyncComponent( () => import('../components/SaveButton.vue'))
+    },
     props:{
          id:{
         type: String,
@@ -67,7 +76,7 @@ export default {
     },
     methods:{
         changeDayLevel(dayNumber, level){
-            this.reg.dayLevels[dayNumber] = Number(level);
+            this.reg.daysLabel[dayNumber] = Number(level);
         },
         getTasks(){
             let {activities} = getActivities();
@@ -88,6 +97,19 @@ export default {
          }
 
         },
+        async updateReg(){
+            console.log("Guardar")
+            let days =[]
+            let values = []
+            for (let index = 0; index < this.reg.daysLabel.length; index++) {
+                if(this.reg.daysLabel[index] > 0){
+                    days.push(index + 1)
+                    values.push(this.reg.daysLabel[index])
+                }
+            }
+           let message = await updateRegister(this.id,this.month,this.year,days,values)
+           console.log(message)
+        }
     },
     computed:{
       monthName(){

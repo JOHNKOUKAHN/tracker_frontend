@@ -11,8 +11,15 @@ export default {
   methods:{
     goToTracker() {
       this.$router.push({name: 'tracker-minimo'})
+    },
+  },
+    beforeCreate(){
+      
+      if(!localStorage.getItem('token')){
+        this.$router.push('/login')
+      }
     }
-  }
+  
 }
 </script>
 

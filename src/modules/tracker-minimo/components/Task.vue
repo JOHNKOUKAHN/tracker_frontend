@@ -17,7 +17,7 @@ export default {
     },
     methods:{
         pushRoute(){
-            this.$router.push({name: 'task', params: {id: this.task.activity_id, month: 3, year: 2022}})
+            this.$router.push({name: 'activities', params: {id: this.task.activity_id}})
         }
     }
     

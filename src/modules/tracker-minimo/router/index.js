@@ -19,6 +19,12 @@ export default {
                  
                 }
             },
+        },
+        {
+            path: 'activities',
+            name: 'activities',
+            component: () => import(/* webpackChunkName: "task" */ '@/modules/tracker-minimo/views/ActivitiesView.vue'),
+            
         }
     ]
   
